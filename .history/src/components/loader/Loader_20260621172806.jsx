@@ -1,9 +1,9 @@
 import { PacmanLoader } from "react-spinners";
-import styles from './Loader.module.css'
+import
 
 const Loader = () => {
   return (
-    <div className={styles.loader}>
+    <div className="loader-container">
         <PacmanLoader
             color="#6495ed"
             loading={true}
