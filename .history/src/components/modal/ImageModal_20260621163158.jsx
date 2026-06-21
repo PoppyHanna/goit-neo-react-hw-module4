@@ -1,0 +1,40 @@
+import Modal from 'react-modal';
+import styles from './ImageModal.module.css'
+  
+const ImageModal = ({ isOpen, image, onClose }) => {
+//  const handleCloseModal = (e) => {
+//     if (e.target === e.currentTarget) {
+//       onClose();
+//     }
+  //   };
+  Modal.setAppElement('#root');
+
+  return (
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      contentLabel="Image Modal"
+      // ariaHideApp={false}
+      ariaHideApp={true}
+      className={styles.modal} 
+      overlayClassName={styles.modalOverlay} 
+      // onClick={handleCloseModal} 
+    >
+      {image && (
+        <>
+          <div className={styles.cont}>
+            <img src={image.urls.full} alt={image.alt_description} className={`${styles.cont} ${styles.img} `} />
+
+            <div className={styles.info}>
+              <p className={styles.clause}><span className={styles.text}>Author:</span>  {image.user.name}</p>
+              <p className={styles.clause}><span className={styles.text}>Likes:</span>  {image.likes}</p>
+              <p className={styles.clause}><span className={styles.text}>Description:</span> {image.description || 'No description available'}</p>
+            </div>
+          </div>
+          </>
+      )}
+    </Modal>
+  );
+};
+
+export default ImageModal;
