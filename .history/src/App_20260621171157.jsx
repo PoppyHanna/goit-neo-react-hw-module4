@@ -31,16 +31,12 @@ export default function App() {
           `https://api.unsplash.com/search/photos/?client_id=${API_KEY}&query=${query}&page=${page}`
         );
         const { results, total_pages } = response.data;
-
-         setImages(prev => [...prev, ...results]);
-
-         setShowBtn(page < total_pages);
-        // setImages((prevImages) => [...prevImages, ...results]);
-        // setShowBtn(total_pages && total_pages !== page); 
+        setImages((prevImages) => [...prevImages, ...results]);
+        setShowBtn(total_pages && total_pages !== page); 
+        setLoading(false); 
       } catch {
         setError('Error fetching images. Please try again later.');
-      } finally {
-        setLoading(false);
+        setLoading(false); 
       }
     };
 
@@ -48,16 +44,14 @@ export default function App() {
   }, [query, page]);
 
   const handleLoadMore = () => {
-    // setPage((prevPage) => prevPage + 1);
-    setPage(prev => prev + 1);
+    setPage((prevPage) => prevPage + 1);
   };
 
   const handleSubmit = (query) => {
     setQuery(query);
     setPage(1);
     setImages([]); 
-    setError('');
-    // setLoading(true); 
+    setLoading(true); 
   };
 
   const handleImageClick = (image) => {
@@ -70,7 +64,7 @@ export default function App() {
 
   return (
     <>
-      <h1 className='title'>Welcome to images Search App!!!</h1>
+      <h1 className='title'>Welcome to images Search App</h1>
       <SearchBar onSubmit={handleSubmit} />
       <ul className='list'>
         {images.map((image) => (
@@ -80,7 +74,7 @@ export default function App() {
         ))}
       </ul>
       {loading && <Loader />} 
-      {showBtn && !loading && <LoadMoreBtn onClick={handleLoadMore} />}
+      {showBtn && <LoadMoreBtn onClick={handleLoadMore} />}
       <ImageModal isOpen={selectedImage !== null} image={selectedImage} onClose={handleCloseModal} />
       {error && <p className="error-message">{error}</p>} 
     </>

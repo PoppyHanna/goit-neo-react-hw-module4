@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import SearchBar from './components/search/SearchBar';
-import Loader from './components/loader/Loader';
-import ImageCard from './components/card/ImageCard';
+// import Loader from './components/loader/Loader';
+// import ImageCard from './components/card/ImageCard';
 import ImageModal from './components/modal/ImageModal';
-import LoadMoreBtn from './components/load/LoadMoreBtn';
-import Modal from 'react-modal';
+// import LoadMoreBtn from './components/load/LoadMoreBtn';
+// import Modal from 'react-modal';
+import ImageGallery from './components/gallery/ImageGallery';
 import './App.css';
 
-Modal.setAppElement('#root');
+// Modal.setAppElement('#root');
 
-const API_KEY = 'lBe-mUB60Xxla_EdiZjir6wfr6grDw0FERa4_66iNwI'; 
+// const API_KEY = 'lBe-mUB60Xxla_EdiZjir6wfr6grDw0FERa4_66iNwI'; 
+const API_KEY = import.meta.env.VITE_UNSPLASH_KEY;
+
 
 export default function App() {
   const [images, setImages] = useState([]);
@@ -26,39 +29,43 @@ export default function App() {
 
     const fetchImages = async () => {
       setLoading(true); 
+
       try {
         const response = await axios.get(
           `https://api.unsplash.com/search/photos/?client_id=${API_KEY}&query=${query}&page=${page}`
         );
+
         const { results, total_pages } = response.data;
 
-         setImages(prev => [...prev, ...results]);
+        setImages(prev => [...prev, ...results]);
 
-         setShowBtn(page < total_pages);
+        setShowBtn(page < total_pages);
+
         // setImages((prevImages) => [...prevImages, ...results]);
         // setShowBtn(total_pages && total_pages !== page); 
+        // setLoading(false); 
       } catch {
         setError('Error fetching images. Please try again later.');
       } finally {
-        setLoading(false);
+        setLoading(false); 
       }
     };
 
     fetchImages();
   }, [query, page]);
 
-  const handleLoadMore = () => {
-    // setPage((prevPage) => prevPage + 1);
-    setPage(prev => prev + 1);
-  };
-
   const handleSubmit = (query) => {
-    setQuery(query);
+    setQuery(query.trim());
     setPage(1);
     setImages([]); 
-    setError('');
-    // setLoading(true); 
+    setLoading(true); 
   };
+
+  const handleLoadMore = () => {
+    setPage((prevPage) => prevPage + 1);
+  };
+
+
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
@@ -70,7 +77,7 @@ export default function App() {
 
   return (
     <>
-      <h1 className='title'>Welcome to images Search App!!!</h1>
+      <h1 className='title'>Welcome to images Search App</h1>
       <SearchBar onSubmit={handleSubmit} />
       <ul className='list'>
         {images.map((image) => (
@@ -80,7 +87,7 @@ export default function App() {
         ))}
       </ul>
       {loading && <Loader />} 
-      {showBtn && !loading && <LoadMoreBtn onClick={handleLoadMore} />}
+      {showBtn && <LoadMoreBtn onClick={handleLoadMore} />}
       <ImageModal isOpen={selectedImage !== null} image={selectedImage} onClose={handleCloseModal} />
       {error && <p className="error-message">{error}</p>} 
     </>

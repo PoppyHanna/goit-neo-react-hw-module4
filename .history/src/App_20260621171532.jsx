@@ -80,7 +80,7 @@ export default function App() {
         ))}
       </ul>
       {loading && <Loader />} 
-      {showBtn && !loading && <LoadMoreBtn onClick={handleLoadMore} />}
+      {showBtn && <LoadMoreBtn onClick={handleLoadMore} />}
       <ImageModal isOpen={selectedImage !== null} image={selectedImage} onClose={handleCloseModal} />
       {error && <p className="error-message">{error}</p>} 
     </>
